@@ -1,7 +1,7 @@
 package net.livingsky.massdep;
 
 import groovy.lang.Closure;
-import org.gradle.api.artifacts.dsl.RepositoryHandler;
+import org.gradle.api.Project;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.gradle.internal.impldep.org.apache.commons.io.IOUtils;
 
@@ -15,9 +15,11 @@ import java.util.Map;
 
 class CredentialRepository extends Closure<Void> {
     private final Descriptor descriptor;
+    private final Project project;
 
-    public CredentialRepository(RepositoryHandler repositories, Descriptor descriptor) {
-        super(repositories);
+    public CredentialRepository(Object owner, Project project, Descriptor descriptor) {
+        super(owner);
+        this.project = project;
         this.descriptor = descriptor;
     }
 
@@ -27,6 +29,10 @@ class CredentialRepository extends Closure<Void> {
             throw new IllegalArgumentException();
         }
         maven.setUrl(getUri(descriptor));
+        maven.credentials(c -> {
+            c.setUsername((String) project.property("gpr.user"));
+            c.setPassword((String) project.property("gpr.key"));
+        });
         return null;
     }
 
@@ -58,7 +64,8 @@ class CredentialRepository extends Closure<Void> {
             throw new IllegalStateException("Unable to define patter: IOException");
         }
         String url =
-                pattern.replaceAll("\\{company}", descriptor.company())
+                pattern.replaceAll("\\{domain}", descriptor.domain())
+                        .replaceAll("\\{company}", descriptor.company())
                         .replaceAll("\\{artifact}", descriptor.artifact())
                         .replaceAll("\\{product}", descriptor.product());
         URI uri = URI.create(url);

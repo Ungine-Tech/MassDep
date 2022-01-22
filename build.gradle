@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 
-group 'net.livingsky.gradle'
+group 'net.livingsky.massdep'
 version '1.0'
 
 repositories {
@@ -23,7 +23,7 @@ gradlePlugin {
     plugins {
         massDep {
             id = 'net.livingsky.massdep'
-            implementationClass = 'net.livingsky.massdep.MassDep'
+            implementationClass = 'net.livingsky.massdep.Plugin'
         }
     }
 }
@@ -32,7 +32,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ungine-tech/MassDep")
+            url = uri("https://maven.pkg.github.com/Ungine-Tech/MassDep")
             credentials {
                 username = GIT_USERNAME ?: project.findProperty("gpr.user")
                 password = GIT_TOKEN ?: project.findProperty("gpr.key")

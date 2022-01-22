@@ -27,7 +27,7 @@ public class PackageDependencyHandler extends Closure<Void> {
                                 && ((MavenArtifactRepository) r).getUrl() == CredentialRepository.getUri(descriptor));
         if (!existing) {
             // add corresponding repository
-            repositories.maven(new CredentialRepository(repositories, descriptor));
+            repositories.maven(new CredentialRepository(repositories, project, descriptor));
         }
         project.getDependencies().add("implementation", descriptor.getGradleNotation());
         return null;

@@ -43,7 +43,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/Ungine-Tech/MassDep")
+            url = uri("https://maven.pkg.github.com/zhufucdev/MassDep")
             credentials {
                 username = GIT_USERNAME ?: project.findProperty("gpr.user")
                 password = GIT_TOKEN ?: project.findProperty("gpr.key")

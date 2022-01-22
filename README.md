@@ -1,2 +1,2 @@
 # MassDep
-Deploy mass depositories
+Deploy mass depositories easily and consistently across projects

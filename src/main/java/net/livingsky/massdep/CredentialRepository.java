@@ -1,9 +1,9 @@
 package net.livingsky.massdep;
 
 import groovy.lang.Closure;
+import org.apache.commons.io.IOUtils;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
-import org.gradle.internal.impldep.org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,17 +25,18 @@ class CredentialRepository extends Closure<Void> {
 
     @Override
     public Void call(Object... args) {
-        if (args.length != 1 || !(args[0] instanceof MavenArtifactRepository maven)) {
+        if (!(getDelegate() instanceof MavenArtifactRepository maven)) {
             throw new IllegalArgumentException();
         }
         maven.setUrl(getUri(descriptor));
-        maven.credentials(c -> {
-            c.setUsername((String) project.property("gpr.user"));
-            c.setPassword((String) project.property("gpr.key"));
-        });
+        if (project.findProject("gpr.user") != null && project.findProperty("gpr.key") != null) {
+            maven.credentials(c -> {
+                c.setUsername((String) project.property("gpr.user"));
+                c.setPassword((String) project.property("gpr.key"));
+            });
+        }
         return null;
     }
-
 
     private static String repositoryPattern;
 

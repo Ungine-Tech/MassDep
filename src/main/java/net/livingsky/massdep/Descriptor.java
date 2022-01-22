@@ -2,6 +2,8 @@ package net.livingsky.massdep;
 
 import org.gradle.internal.impldep.org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
+
 /**
  * A descriptor is a set of information that defines a package target,
  * which can be parsed using a fixed pattern
@@ -10,7 +12,7 @@ import org.gradle.internal.impldep.org.jetbrains.annotations.NotNull;
  */
 public record Descriptor(String domain, String company, String product, String artifact, String version) {
     public String getGradleNotation() {
-        return String.format("%s.%s.%s:%s:%s", domain, company, product, artifact, version);
+        return String.format("%s.%s.%s:%s:%s", domain, company.toLowerCase(Locale.ROOT), product, artifact, version);
     }
 
     public static final String DEFAULT_DOMAIN = "net";

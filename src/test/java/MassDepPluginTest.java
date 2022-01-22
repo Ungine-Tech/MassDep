@@ -17,13 +17,13 @@ public class MassDepPluginTest {
         project = ProjectBuilder.builder().build();
         project.getPluginManager().apply("net.livingsky.massdep");
 
-        Object closure = project.getDependencies().getExtensions().findByName("package");
+        Object closure = project.getDependencies().getExtensions().findByName("pack");
         Assertions.assertInstanceOf(Closure.class, closure);
     }
 
     @Test
     public void addDependency() {
-        ((Closure<?>) project.getDependencies().getExtensions().findByName("package"))
+        ((Closure<?>) project.getDependencies().getExtensions().findByName("pack"))
                 .call("LivingSky.api:base:1.0.4");
     }
 

@@ -1,4 +1,4 @@
-package net.livingsky.massdep;
+package com.zhufucdev.massdep;
 
 import org.gradle.api.Project;
 

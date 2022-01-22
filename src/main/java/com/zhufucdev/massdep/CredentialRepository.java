@@ -1,4 +1,4 @@
-package net.livingsky.massdep;
+package com.zhufucdev.massdep;
 
 import groovy.lang.Closure;
 import org.apache.commons.io.IOUtils;

@@ -4,7 +4,7 @@ plugins {
     id 'com.gradle.plugin-publish' version '0.20.0'
 }
 
-group 'net.livingsky.massdep'
+group 'com.zhufucdev.massdep'
 version '1.1'
 
 repositories {
@@ -28,7 +28,7 @@ gradlePlugin {
             id = 'net.livingsky.massdep'
             displayName = 'MassDep'
             description = 'Deploy mass depositories easily and consistently across projects'
-            implementationClass = 'net.livingsky.massdep.Plugin'
+            implementationClass = 'com.zhufucdev.messdep.Plugin'
         }
     }
 }

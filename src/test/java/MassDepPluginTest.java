@@ -1,4 +1,5 @@
 import groovy.lang.Closure;
+import io.github.zhufucdev.massdep.Descriptor;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.repositories.ArtifactRepository;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
@@ -15,10 +16,17 @@ public class MassDepPluginTest {
     @BeforeAll
     static void init() {
         project = ProjectBuilder.builder().build();
-        project.getPluginManager().apply("net.livingsky.massdep");
+        project.getPluginManager().apply("io.github.zhufucdev.massdep");
 
         Object closure = project.getDependencies().getExtensions().findByName("pack");
         Assertions.assertInstanceOf(Closure.class, closure);
+    }
+
+    @Test
+    public void testDescriptor() {
+        Descriptor descriptor = Descriptor.parse("test>net.example.test:testing:1.0.0", project);
+        Assertions.assertEquals("net.example.test:testing:1.0.0", descriptor.getGradleNotation());
+        Assertions.assertEquals("test", descriptor.configuration());
     }
 
     @Test

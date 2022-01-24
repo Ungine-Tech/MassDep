@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.zhufucdev.massdep'
-version '1.1'
+version '1.2'
 
 repositories {
     mavenCentral()
@@ -25,10 +25,10 @@ test {
 gradlePlugin {
     plugins {
         massDep {
-            id = 'net.livingsky.massdep'
+            id = 'io.github.zhufucdev.massdep'
             displayName = 'MassDep'
             description = 'Deploy mass depositories easily and consistently across projects'
-            implementationClass = 'com.zhufucdev.messdep.Plugin'
+            implementationClass = 'io.github.zhufucdev.massdep.Plugin'
         }
     }
 }
@@ -41,13 +41,10 @@ pluginBundle {
 
 publishing {
     repositories {
+
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/zhufucdev/MassDep")
-            credentials {
-                username = GIT_USERNAME ?: project.findProperty("gpr.user")
-                password = GIT_TOKEN ?: project.findProperty("gpr.key")
-            }
+            name = "local"
+            url = uri("file:///home/zhufu/gradle/local-repository")
         }
     }
     publications {

@@ -20,9 +20,10 @@ class CredentialRepository extends Closure<Void> {
 
     @Override
     public Void call(Object... args) {
-        if (!(getDelegate() instanceof MavenArtifactRepository maven)) {
+        if (!(getDelegate() instanceof MavenArtifactRepository)) {
             throw new IllegalArgumentException();
         }
+        MavenArtifactRepository maven = (MavenArtifactRepository) getDelegate();
         maven.setUrl(getUri(descriptor, project));
 
         String username = "", key = "";
@@ -30,7 +31,7 @@ class CredentialRepository extends Closure<Void> {
         if (extension.getKey().isPresent() && extension.getUser().isPresent()) {
             username = extension.getUser().get();
             key = extension.getKey().get();
-        } else if (project.findProject("gpr.user") != null && project.findProperty("gpr.key") != null) {
+        } else if (project.findProperty("gpr.user") != null && project.findProperty("gpr.key") != null) {
             username = (String) project.property("gpr.user");
             key = (String) project.property("gpr.key");
         }
@@ -62,10 +63,10 @@ class CredentialRepository extends Closure<Void> {
             return cache.get(descriptor);
         String pattern = getRepositoryPattern(project);
         String url =
-                pattern.replaceAll("\\{domain}", descriptor.domain())
-                        .replaceAll("\\{company}", descriptor.company())
-                        .replaceAll("\\{artifact}", descriptor.artifact())
-                        .replaceAll("\\{product}", descriptor.product());
+                pattern.replaceAll("\\{domain}", descriptor.getDomain())
+                        .replaceAll("\\{company}", descriptor.getCompany())
+                        .replaceAll("\\{artifact}", descriptor.getArtifact())
+                        .replaceAll("\\{product}", descriptor.getProduct());
         URI uri = URI.create(url);
         cache.put(descriptor, uri);
         return uri;

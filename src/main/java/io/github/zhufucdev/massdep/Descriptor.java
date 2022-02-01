@@ -11,27 +11,47 @@ import java.util.Locale;
  *
  * @see Descriptor#parse(String, Project) Parsing
  */
-public record Descriptor(Project project, String configuration, String domain, String company, String product, String artifact, String version) {
-    private MassDepExtension extension () {
-        return Plugin.depExtensionMap.get(project);
-    }
-    public String getGradleNotation() {
-        return String.format("%s.%s.%s:%s:%s", domain(), company().toLowerCase(Locale.ROOT), product(), artifact, version);
+public class Descriptor {
+    private final Project project;
+    private final String configuration, domain, company, product, artifact, version;
+
+    public Descriptor(Project project, String configuration, String domain, String company, String product,
+                      String artifact, String version) {
+        this.project = project;
+        this.configuration = configuration;
+        this.domain = domain;
+        this.company = company;
+        this.product = product;
+        this.artifact = artifact;
+        this.version = version;
     }
 
-    @Override
-    public String company() {
+    private MassDepExtension extension() {
+        return Plugin.depExtensionMap.get(project);
+    }
+
+    public String getGradleNotation() {
+        return String.format("%s.%s.%s:%s:%s", getDomain(), getCompany().toLowerCase(Locale.ROOT), getProduct(), artifact, version);
+    }
+
+    public String getCompany() {
         return company.isEmpty() ? extension().getDefaultCompany().get() : company;
     }
 
-    @Override
-    public String domain() {
+    public String getDomain() {
         return domain.isEmpty() ? extension().getDefaultDomain().get() : domain;
     }
 
-    @Override
-    public String product() {
+    public String getProduct() {
         return product.isEmpty() ? extension().getDefaultProduct().get() : product;
+    }
+
+    public String getArtifact() {
+        return artifact;
+    }
+
+    public String getConfiguration() {
+        return configuration;
     }
 
     /**
@@ -41,6 +61,7 @@ public record Descriptor(Project project, String configuration, String domain, S
      * <pre>
      * [ConfigurationName>][[{Domain}].{Company}.{Product}:]{Artifact}:{Version}
      * </pre>
+     *
      * @param description The pattern
      * @return A descriptor containing pattern's information
      * @see Descriptor
@@ -61,15 +82,15 @@ public record Descriptor(Project project, String configuration, String domain, S
         String[] blocks = processed.split(":");
         String domain, company, product, artifact, version;
         switch (blocks.length) {
-            case 2 -> {
+            case 2:
                 // define artifact and version only
                 artifact = blocks[0].trim();
                 version = blocks[1].trim();
                 domain = "";
                 company = "";
                 product = "";
-            }
-            case 3 -> {
+                break;
+            case 3:
                 String[] cp = blocks[0].split("\\.");
                 if (cp.length == 2) {
                     domain = "";
@@ -83,7 +104,7 @@ public record Descriptor(Project project, String configuration, String domain, S
                     int n = cp.length;
                     // use the first n - 2 selections as domain
                     StringBuilder domainBuilder = new StringBuilder(cp[0].trim());
-                    for (int i = 1; i < n - 2; i ++) {
+                    for (int i = 1; i < n - 2; i++) {
                         domainBuilder.append(".").append(cp[i].trim());
                     }
                     domain = domainBuilder.toString();
@@ -95,8 +116,9 @@ public record Descriptor(Project project, String configuration, String domain, S
 
                 artifact = blocks[1].trim();
                 version = blocks[2].trim();
-            }
-            default -> throw new IllegalArgumentException("Not following [{Company}.{Product}:]{Artifact}:{Version}");
+                break;
+            default:
+                throw new IllegalArgumentException("Not following [{Company}.{Product}:]{Artifact}:{Version}");
         }
 
         if (shouldWarn) {

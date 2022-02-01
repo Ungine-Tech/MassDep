@@ -26,7 +26,7 @@ public class MassDepPluginTest {
     public void testDescriptor() {
         Descriptor descriptor = Descriptor.parse("test>net.example.test:testing:1.0.0", project);
         Assertions.assertEquals("net.example.test:testing:1.0.0", descriptor.getGradleNotation());
-        Assertions.assertEquals("test", descriptor.configuration());
+        Assertions.assertEquals("test", descriptor.getConfiguration());
     }
 
     @Test

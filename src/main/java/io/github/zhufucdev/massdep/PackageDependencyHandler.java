@@ -29,9 +29,9 @@ public class PackageDependencyHandler extends Closure<Void> {
             // add corresponding repository
             repositories.maven(new CredentialRepository(repositories, project, descriptor));
         }
-        String configuration = descriptor.configuration().isEmpty()
+        String configuration = descriptor.getConfiguration().isEmpty()
                 ? Plugin.depExtensionMap.get(project).getDefaultConfiguration().getOrElse("implementation")
-                : descriptor.configuration();
+                : descriptor.getConfiguration();
         project.getDependencies().add(configuration , descriptor.getGradleNotation());
         return null;
     }

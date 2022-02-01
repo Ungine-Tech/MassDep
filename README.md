@@ -88,7 +88,7 @@ You can take a step further by defining the **default** company, domain and prod
 ```groovy
 massDep {
     pattern = "https://maven.pkg.github.com/example/{company}_{artifact}-{product}"
-    defaultCompant = "Example"
+    defaultCompany = "Example"
     defaultDomain = "com"
     defaultProduct = "api"
 }
@@ -126,4 +126,18 @@ you can write them in the **gradle.properties** file for convenience in VC.
 ```properties
 gpr.user=some string
 gpr.key=some string
+```
+
+## Dependency Configurations
+The default configuration is `implementation`. If you want to declare a dependency with a
+different config, use the `>` symbol.
+```groovy
+pack 'compileOnly>com.example.api:base:1.0.0'
+```
+In addition, you can change the default configuration by changing the plugin configuration.
+```groovy
+massDep {
+    pattern = "https://maven.pkg.github.com/example/.."
+    defaultConfiguration = 'classpath'
+}
 ```
